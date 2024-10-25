@@ -27,6 +27,7 @@ const cdp = @import("cdp.zig");
 const result = cdp.result;
 const getMsg = cdp.getMsg;
 const stringify = cdp.stringify;
+const target = @import("target.zig");
 
 const log = std.log.scoped(.cdp);
 
@@ -122,6 +123,27 @@ fn sendInspector(
     } else {
         ctx.sendInspector(s);
     }
+
+    if (method == .enable) {
+        try executionContextCreated(
+            alloc,
+            ctx,
+            0,
+            "://",
+            "",
+            // TODO: hard coded ID
+            "7102379147004877974.3265385113993241162",
+            .{
+                .isDefault = true,
+                .type = "default",
+                // TODO: hard coded ID
+                .frameId = cdp.FrameID,
+            },
+            // TODO: hard coded ID
+            target.BrowserContextID,
+        );
+    }
+
     return "";
 }
 
